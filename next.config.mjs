@@ -1,8 +1,10 @@
-let userConfig = undefined
+let userConfig = undefined;
 try {
-  userConfig = await import('./v0-user-next.config')
+  userConfig = await import("./v0-user-next.config");
+  console.log("User config loaded:", userConfig);
 } catch (e) {
-  // ignore error
+  console.error("Error loading user config:", e);
+  // Ignore error, but you can also handle this more gracefully.
 }
 
 /** @type {import('next').NextConfig} */
@@ -17,18 +19,21 @@ const nextConfig = {
     unoptimized: true,
   },
   experimental: {
-    webpackBuildWorker: true,
-    parallelServerBuildTraces: true,
-    parallelServerCompiles: true,
+    webpackBuildWorker: false, // Disable temporarily
+    parallelServerBuildTraces: false, // Disable temporarily
+    parallelServerCompiles: false, // Disable temporarily
   },
-}
+};
 
-mergeConfig(nextConfig, userConfig)
+mergeConfig(nextConfig, userConfig);
 
 function mergeConfig(nextConfig, userConfig) {
   if (!userConfig) {
-    return
+    console.warn("User config not found.");
+    return;
   }
+
+  console.log("Merging user config:", userConfig);
 
   for (const key in userConfig) {
     if (
@@ -38,11 +43,12 @@ function mergeConfig(nextConfig, userConfig) {
       nextConfig[key] = {
         ...nextConfig[key],
         ...userConfig[key],
-      }
+      };
     } else {
-      nextConfig[key] = userConfig[key]
+      nextConfig[key] = userConfig[key];
     }
   }
 }
 
-export default nextConfig
+console.log("Final merged nextConfig:", nextConfig);
+export default nextConfig;

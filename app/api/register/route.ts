@@ -1,4 +1,4 @@
-import { hash } from "bcrypt"
+import { hash } from "bcryptjs"
 import { NextResponse } from "next/server"
 import { db } from "@/lib/db"
 import * as z from "zod"
